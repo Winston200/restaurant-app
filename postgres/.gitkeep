@@ -1,0 +1,2 @@
+# Keep directory for future init scripts (e.g. schema.sql)
+# Mount example: ./postgres/init:/docker-entrypoint-initdb.d

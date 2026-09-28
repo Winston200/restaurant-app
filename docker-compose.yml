@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: restaurant_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: restaurant
+      POSTGRES_PASSWORD: restaurant
+      POSTGRES_DB: restaurant
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U restaurant -d restaurant"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - restaurant_net
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: restaurant_api
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      DATABASE_URL: postgres://restaurant:restaurant@postgres:5432/restaurant?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "8080"
+    networks:
+      - restaurant_net
+
+  ws:
+    build:
+      context: ./ws
+      dockerfile: Dockerfile
+    container_name: restaurant_ws
+    restart: unless-stopped
+    environment:
+      PORT: "8081"
+      DATABASE_URL: postgres://restaurant:restaurant@postgres:5432/restaurant?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "8081"
+    networks:
+      - restaurant_net
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: restaurant_nginx
+    restart: unless-stopped
+    ports:
+      - "8888:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+      - ws
+    networks:
+      - restaurant_net
+
+volumes:
+  postgres_data:
+
+networks:
+  restaurant_net:
+    driver: bridge

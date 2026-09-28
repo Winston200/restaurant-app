@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+*.exe
+*.log
+.DS_Store
+.idea/
+.vscode/
+postgres_data/
+**/tmp/
