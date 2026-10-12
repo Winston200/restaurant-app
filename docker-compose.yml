@@ -28,6 +28,11 @@ services:
     environment:
       PORT: "8080"
       DATABASE_URL: postgres://restaurant:restaurant@postgres:5432/restaurant?sslmode=disable
+      JWT_ACCESS_SECRET: change-me-restaurant-jwt-access-secret
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_SECRET: change-me-restaurant-jwt-refresh-secret
+      JWT_REFRESH_EXPIRES_IN: 168h
+      JWT_ISSUER: restaurant-api
     depends_on:
       postgres:
         condition: service_healthy

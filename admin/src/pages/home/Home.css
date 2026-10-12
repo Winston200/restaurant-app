@@ -20,3 +20,19 @@
   color: #666;
   font-size: 0.95rem;
 }
+
+.home__logout {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.25rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.home__logout:hover {
+  border-color: #1f3a5f;
+  color: #1f3a5f;
+}

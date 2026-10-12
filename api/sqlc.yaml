@@ -1,0 +1,23 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    # Only *.up.sql DDL — exclude *.down.sql and seed DML migrations.
+    schema:
+      - "../migrations/000001_create_admins_table.up.sql"
+      - "../migrations/000002_create_customers_table.up.sql"
+      - "../migrations/000003_create_roles_table.up.sql"
+      - "../migrations/000004_create_permissions_table.up.sql"
+      - "../migrations/000005_create_restaurants_table.up.sql"
+      - "../migrations/000006_create_restaurant_admins_table.up.sql"
+      - "../migrations/000007_create_role_has_permissions_table.up.sql"
+      - "../migrations/000008_alter_restaurant_admins_unique_key.up.sql"
+      - "../migrations/000010_create_admin_refresh_sessions_table.up.sql"
+    queries: "db/queries"
+    gen:
+      go:
+        package: "sqlc"
+        out: "db/sqlc"
+        sql_package: "pgx/v5"
+        emit_json_tags: true
+        emit_empty_slices: true
+        emit_pointers_for_null_types: true
